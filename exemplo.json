@@ -1,0 +1,140 @@
+const { log, table } = require("console");
+const { json } = require("stream/consumers");
+
+let jsonString
+
+try{
+    const fs = require("fs")
+    jsonString = fs.readFileSync(__dirname + "/countries-table.json")
+} catch (erro){
+    console.log('Ocorreu algum erro ao ler arquivo:', erro);
+    return
+}
+
+const listaPaises = JSON.parse(jsonString)
+
+function mostrarPaises(lista){
+    // Ordenando a lista por ordem alfábetica dos países
+    lista.sort((a, b) => a.country.localeCompare(b.country));
+
+    // Só formatando o output no terminal, para ficar simples
+    //for (pais of lista){
+    //    console.log(`${pais.country}`);
+    //}
+
+    console.table(lista.map((x) => `${x.country}  População 2023: ${x.pop2023}`));
+}
+//mostrarPaises(listaPaises)
+
+function populacaoDecrescente(){
+    // Filtrando a lista de paises em ordem crescente conforme o atributo pop2023
+    const ordDecr = (a, b) => b.pop2023 - a.pop2023;
+    const listaPaisesOrd = [...listaPaises]
+    listaPaisesOrd.sort(ordDecr)
+
+    // Só formatando o output no terminal
+    /*
+    for (pais of listaPaisesOrd){
+        if (pais.pop2023){
+            console.log(`${pais.country} População de 2023: ${pais.pop2023}`);
+        }
+        else {
+            console.log(`${pais.country} Sem dados de população em 2023`);
+        }
+    }
+    */
+   
+   console.table(listaPaisesOrd.map((x) => x.pop2023 ? `${x.country}  População 2023: ${x.pop2023}` : `${x.country}  Sem dados de 2023`));
+}
+
+//populacaoDecrescente(listaPaises)
+
+function populacaoCrescente(){
+    // Filtrando a lista de paises em ordem decrescente conforme o atributo pop2023
+    const ordCre = (a, b) => a.pop2023 - b.pop2023;
+    const listaPaisesOrd = [...listaPaises]
+    listaPaisesOrd.sort(ordCre)
+    
+    for (pais of listaPaisesOrd){
+        if (pais.pop2023){
+            console.log(`${pais.country} População de 2023: ${pais.pop2023}`);
+        }
+        else {
+            console.log(`${pais.country} Sem dados de população em 2023`);
+        }
+    }
+}
+
+//populacaoCrescente()
+//populacaoDecrescente()
+
+function maiorPop2050(lista){
+    const ordDecr = (a, b) => b.pop2025 - a.pop2025;
+    const listaPaisesOrd = [...listaPaises]
+    listaPaisesOrd.sort(ordDecr)
+
+
+    console.log(`${listaPaisesOrd[0].country} com uma estimativa de: ${listaPaisesOrd[0].pop2050} habitantes`);
+}
+//maiorPop2050(listaPaises)
+
+function maiorTerritorio(lista){
+    const ordDecr = (a, b) => b.area - a.area;
+    const listaPaisesOrd = [...listaPaises]
+    listaPaisesOrd.sort(ordDecr)
+
+    console.log(`${listaPaisesOrd[0].country} com ${listaPaisesOrd[0].area} km²`);
+    // Prova real da wikipedia: Russia -> 17 124 442 km²
+}
+//maiorTerritorio(listaPaises)
+
+function tresMenosPop2023(){
+    const ordCre = (a, b) => a.pop2023 - b.pop2023;
+    const listaPaisesOrd = [...listaPaises]
+    listaPaisesOrd.sort(ordCre)
+
+    console.log("Os menos populosos de 2023:");
+    for (i = 0; i < 3; i++){
+        console.log(`${(i + 1)+"°"} ${listaPaisesOrd[i].country} com ${listaPaisesOrd[i].pop2023} habitantes`);
+    }
+}
+//tresMenosPop2023(listaPaises)
+
+function tresMaisPop2023(){
+    const ordDecr = (a, b) => b.pop2023 - a.pop2023;
+    const listaPaisesOrd = [...listaPaises]
+    listaPaisesOrd.sort(ordDecr)
+
+    console.log("Os mais populosos de 2023:");
+    for (i = 0; i < 3; i++){
+        console.log(`${(i + 1)+"°"} ${listaPaisesOrd[i].country} com ${listaPaisesOrd[i].pop2023} habitantes`);
+    }
+}
+//tresMaisPop2023(listaPaises)
+
+function menosPop2023(lista){
+    const ordCre = (a, b) => a.pop2023 - b.pop2023;
+    const listaPaisesOrd = [...listaPaises]
+    
+    listaPaisesOrd.sort(ordCre)
+    console.log(`O menos populoso de 2023: ${listaPaisesOrd[0].country}`);
+}
+//menosPop2023(listaPaises)
+
+function maisPop2023(lista){
+    const ordDecr = (a, b) => b.pop2023 - a.pop2023;
+    const listaPaisesOrd = [...listaPaises]
+    listaPaisesOrd.sort(ordDecr)
+
+    console.log(`O mais populoso de 2023: ${listaPaisesOrd[0].country}`);
+}
+//maisPop2023(listaPaises)
+
+//console.log(`Primeiro país da lista, sem alteração alguma: ${listaPaises[0].country}`);
+//console.log(`Último país da lista, sem alteração alguma: ${listaPaises[listaPaises.length-1].country}`);
+
+
+console.table(decrescente = ((x) => [...x].sort((a, b) => b.pop2023 - a.pop2023).map(pais => ({pais: pais.country, populacao2023: pais.pop2023})))(listaPaises));
+
+//ordenarPaisesDecrescente(listaPaises)
+
